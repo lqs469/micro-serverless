@@ -1,5 +1,3 @@
-// error test
-
 async function main() {
   const tops = await ctx.curl('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty', {
     dataType: 'json',

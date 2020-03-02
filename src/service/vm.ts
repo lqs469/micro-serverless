@@ -1,17 +1,17 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
-import { provide } from "midway";
+import { provide } from 'midway';
 import {
   IVmService,
   IVmOptions,
   IFnObject,
   // IVmResult
   IReadFilesParams,
-  IFnsResult
-} from "../interface";
+  IFnsResult,
+} from '../interface';
 
-@provide("vmService")
+@provide('vmService')
 export class VmService implements IVmService {
   fnPool: IFnObject = {
     // a: () => 1,
@@ -19,13 +19,22 @@ export class VmService implements IVmService {
   };
 
   onFileContent(filename: string, content: string): void {
-    this.fnPool[filename.replace(/\.ts|\.js/g, "")] = content;
+    this.fnPool[filename.replace(/\.ts|\.js/g, '')] = content;
+  }
+
+  async getList(): Promise<string[]> {
+    await this.readFiles({
+      dirname: path.resolve('./src/fns'),
+      onError: err => console.error(err),
+    });
+
+    return Object.keys(this.fnPool).sort((a, b) => (a > b ? 1 : -1));
   }
 
   async getFn(options: IVmOptions): Promise<string> {
     await this.readFiles({
-      dirname: path.resolve("./src/fns"),
-      onError: err => console.error(err)
+      dirname: path.resolve('./src/fns'),
+      onError: err => console.error(err),
     });
 
     const fnString = this.fnPool[options.id];
@@ -46,7 +55,7 @@ export class VmService implements IVmService {
         filenames.forEach(filename => {
           fs.readFile(
             `${dirname}/${filename}`,
-            "utf-8",
+            'utf-8',
             (err: string, content: string) => {
               if (err) {
                 onError(err);
@@ -58,7 +67,7 @@ export class VmService implements IVmService {
               if (sum === filenames.length) {
                 next();
               }
-            }
+            },
           );
         });
       });

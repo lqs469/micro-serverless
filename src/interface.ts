@@ -21,6 +21,7 @@ export interface IFnObject {
  */
 export interface IVmService {
   getFn(options: IVmOptions): Promise<any>;
+  getList(): Promise<string[]>;
 }
 
 export interface IReadFilesParams {

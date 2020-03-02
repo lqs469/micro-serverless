@@ -12,14 +12,93 @@
   <script src="https://cdn.bootcss.com/codemirror/5.48.4/mode/javascript/javascript.min.js"></script>
   <link href="https://cdn.bootcss.com/codemirror/5.48.4/codemirror.css" rel="stylesheet">
   <style>
+    body {
+      margin: 0;
+    }
     .CodeMirror {
-      height: 60vh;
+      min-height: 60%;
+    }
+    .header a {
+      line-height: 40px;
+      padding: 10px 20px;
+      color: #000;
+      text-decoration: none;
+    }
+    .container {
+      height: calc(100vh - 40px);
+      font-size: 13.3px;
+      display: flex;
+      background: rgb(246, 246, 239);
+    }
+    .left {
+      overflow: auto;
+      flex-basis: 200px;
+    }
+    .left li {
+      margin-bottom: 5px;
+    }
+    .left a {
+      color: #888;
+      font-size: 12px;
+    }
+    .right {
+      overflow: auto;
+      flex: 1;
     }
   </style>
 </head>
-<body margin="0">
-<a href="/">home</a>
+<body>
+  <div class="header">
+    <a href="/"><strong>Node.js FaaS</strong></a>
+  </div>
 
-{% block content %}{% endblock %}
+  <section class="container">
+    <div class="left">
+      <ol>
+      {% for file in files %}
+        <li>
+            <span>{{ file }}</span>
+            <br />
+            <a href="/edit/{{ file }}">Edit</a>
+            <a href="/vm/{{ file }}" target="_blank">Test</a>
+            <a href="#" onclick="onRemove(`{{ file }}`)">Delete</a>
+        </li>
+      {% endfor %}
+        <li>
+          <hr />
+          <input id="newFunctionName" placeholder="function name" />
+          <button onclick="newFunc()">new</button>
+        </li>
+      </ol>
+    </div>
+    <div class="right">
+      {% block content %}{% endblock %}
+    </div>
+  </section>
+<script>
+  var newFunc = () => {
+    const functionName = document.getElementById("newFunctionName");
+
+    console.log(functionName, functionName.value)
+    if (functionName && functionName.value) {
+      window.location.href = "/edit/" + functionName.value;
+    }
+  }
+
+  var onRemove = (name) => {
+    fetch('/api/remove', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+      })
+    }).then(res => {
+      alert('Deleted!');
+      window.location.href = "/";
+    });
+  }
+</script>  
 </body>
 </html>

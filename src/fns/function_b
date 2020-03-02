@@ -2,6 +2,6 @@
 async function main(ctx) {
   while(1) {}
 
-  return 'Hello world!'
+  return 'Hello world!!'
 };
 

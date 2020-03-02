@@ -1,26 +1,18 @@
-import { Context, inject, controller, get, provide } from "midway";
-const path = require("path");
-const fs = require("fs");
+import { Context, inject, controller, get, provide } from 'midway';
+import { IVmService } from '../../interface';
 
 @provide()
-@controller("/")
+@controller('/')
 export class HomeController {
   @inject()
   ctx: Context;
 
-  @get("/")
+  @inject('vmService')
+  service: IVmService;
+
+  @get('/')
   async index() {
-    const files: string[] = await new Promise(next => {
-      fs.readdir(path.resolve("./src/fns"), (err: string, files: string[]) => {
-        if (err) {
-          console.error(err);
-          next([]);
-        }
-
-        next(files.map(file => encodeURIComponent(file)));
-      });
-    });
-
-    await this.ctx.render("index", { files });
+    let files = await this.service.getList();
+    await this.ctx.render('index', { files });
   }
 }

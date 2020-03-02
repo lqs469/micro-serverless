@@ -1,33 +1,25 @@
-import { Context, inject, controller, get, provide } from "midway";
-const path = require("path");
-const fs = require("fs");
+import { Context, inject, controller, get, provide } from 'midway';
+import { IVmService } from '../../interface';
 
 @provide()
-@controller("/edit")
+@controller('/edit')
 export class EditController {
   @inject()
   ctx: Context;
 
-  @get("/:name")
+  @inject('vmService')
+  service: IVmService;
+
+  @get('/:name')
   async index() {
     const filename = this.ctx.params.name;
 
-    const dirname = path.resolve("./src/fns");
-    const fileContent: string = await new Promise(next => {
-      fs.readFile(
-        `${dirname}/${filename}`,
-        "utf-8",
-        (err: string, content: string) => {
-          if (err) {
-            console.error(err);
-            next("");
-          }
+    const fileContent = encodeURIComponent(
+      await this.service.getFn({ id: filename }),
+    );
 
-          next(encodeURIComponent(content));
-        }
-      );
-    });
+    const files = await this.service.getList();
 
-    await this.ctx.render("edit", { filename, fileContent });
+    await this.ctx.render('edit', { files, filename, fileContent });
   }
 }

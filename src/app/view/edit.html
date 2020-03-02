@@ -1,14 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h3>{{ filename }} <span id='filename-tag' style="color: red"></span></h3>
+<ul>
+  <div>
+    <strong>{{ filename }} <span id='filename-tag' style="color: red"></span></strong>
+  </div>
+  <small>
+    Test URL: <a href="/vm/{{ filename }}" target="_blank"><span id="host"></span>/vm/{{ filename }}</a>
+  </small>
+</ul>
 
 <textarea id="code" cols="120" rows="30" style="font-family: monospace;font-size: 22px;"></textarea>
-<div>
-  <button onclick="onUpload()">UPLOAD</button>
-</div>
+<div style="margin: 10px 0"><button onclick="onUpload()">UPDATE</button></div>
 
 <script>
+const host = document.getElementById('host');
+if (host) {
+  host.innerText = window.location.protocol + window.location.host;
+}
+
 const fileContent = decodeURIComponent(`{{ fileContent | safe }}` || '');
 
 if (!fileContent) {
@@ -22,11 +32,11 @@ const editor = CodeMirror.fromTextArea(document.getElementById('code'), {
 
 editor.setValue(fileContent);
 
-function onUpload() {
+var onUpload = () => {
   const code = editor.getValue();
   const name = '{{ filename }}';
 
-  fetch('/api/uploadCode', {
+  fetch('/api/update', {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
