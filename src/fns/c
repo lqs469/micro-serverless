@@ -1,0 +1,10 @@
+async function main() {
+  const { location } = ctx.query;
+
+  const URL = `https://restapi.amap.com/v3/geocode/regeo?key=530104eda85fd8ca93f3f1acdbf546b4&location=${location}&extensions=all`;
+  const data = await ctx.curl(URL, {
+    dataType: 'json',
+  });
+
+  return data || {};
+}

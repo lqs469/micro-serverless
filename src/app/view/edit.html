@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h3>{{ filename }} <span id='filename-tag' style="color: red"></span></h3>
+
+<textarea id="code" cols="120" rows="30" style="font-family: monospace;font-size: 22px;"></textarea>
+<div>
+  <button onclick="onUpload()">UPLOAD</button>
+</div>
+
+<script>
+const fileContent = decodeURIComponent(`{{ fileContent | safe }}` || '');
+
+if (!fileContent) {
+  document.getElementById('filename-tag').innerText = '(New)';
+}
+
+const editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+  lineNumbers: true,
+  mode: 'javascript',
+});
+
+editor.setValue(fileContent);
+
+function onUpload() {
+  const code = editor.getValue();
+  const name = '{{ filename }}';
+
+  fetch('/api/uploadCode', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      name,
+      code,
+    })
+  }).then(res => {
+    alert('Uploaded!');
+  });
+}
+</script>
+{% endblock %}

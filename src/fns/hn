@@ -1,0 +1,24 @@
+// error test
+
+async function main() {
+  const tops = await ctx.curl('https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty', {
+    dataType: 'json',
+  }) || [];
+
+  let hnList = [];
+
+  await Promise.all(
+    tops.data.slice(0, 10).map(
+      item => ctx.curl(`https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`, { dataType:'json' })
+    )
+  ).then((data) => {
+    hnList = data.map(item => ({
+      title: item.data.title,
+      url: item.data.url || `https://news.ycombinator.com/item?id=${item.data.id}`,
+      '🔥': `${item.data.score} points By ${item.data.by} ${new Date(item.data.time * 1000).toLocaleString()} | ${item.data.descendants} comments`,
+    }));
+  });
+
+
+  return hnList;
+}

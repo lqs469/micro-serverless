@@ -1,0 +1,14 @@
+async function main() {
+  const start = new Date().toLocaleTimeString();
+
+  const end = await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(new Date().toLocaleTimeString());
+    }, 1000 * 1);
+  });
+
+  return {
+    start,
+    end,
+  }
+};

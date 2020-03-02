@@ -1,0 +1,12 @@
+async function main() {
+  const url = 'https://www.zhihu.com/api/v3/feed/topstory/hot-lists/total?limit=50&desktop=true';
+  
+  const res = await ctx.curl(url, { dataType: 'json' });
+  
+  return res.data.data.map((item) => ({
+    title: item.target.title,
+    url: `https://www.zhihu.com/question/${item.target.id}`,
+    info: `${item.detail_text}🔥 | ${new Date(item.target.created * 1000).toLocaleString()}`,
+    desc: item.target.excerpt,
+  }));
+}

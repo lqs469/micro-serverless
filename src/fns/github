@@ -1,0 +1,11 @@
+async function main() {
+  const url = 'https://github-trending-api.now.sh/repositories';
+  
+  const res = await ctx.curl('https://github-trending-api.now.sh/repositories', { dataType: 'json' });
+  
+  return res.data.map((item) => ({
+    title: `${item.name} | 👨‍💻${item.author} | ⭐️${item.stars} | ${item.language}`,
+    url: item.url,
+    desc: item.description,
+  }));
+}
