@@ -6,6 +6,10 @@ It provides a micro FaaS service allowing you to run, develop and manage applica
 
 [中文 Readme](./README.zh-CN.md)
 
+## Motivation
+
+I wanted to build some simple personal assistant programs like weather tips, news feed or reminding me not to miss the game. And it's unnecessary to build several huge apps use Spring or complexity framework. a serverless service is proper I thought. So I made an uncomplicated and flexible serverless application with just-enough features.
+
 ## Quick Start
 
 ```bash
@@ -184,10 +188,6 @@ async function main() {
 ```
 
 GET `//127.0.0.1:7001/vm/weather?location=Tokyo`
-
-## Motivation
-
-I wanted to build some simple personal assistant programs like weather tips, news feed or reminding me not to miss the game. And it's unnecessary to build several huge apps use Spring or complexity framework. a serverless service is proper I thought. So I made an uncomplicated and flexible serverless application with just-enough features.
 
 ## FAQ
 
