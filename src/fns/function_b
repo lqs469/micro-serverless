@@ -1,5 +1,4 @@
-
-async function main(ctx) {
+function main(ctx) {
   while(1) {}
 
   return 'Hello world!!'

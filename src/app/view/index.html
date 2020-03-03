@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <h1>Hello world</h1>
+  <div id="md-container">Hello, world!</div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+  <script>
+    var converter = new showdown.Converter();
+    readme = decodeURIComponent(`{{ readme | safe }}`)
+    html = converter.makeHtml(readme);
+    document.getElementById('md-container').innerHTML = html;
+  </script>
 {% endblock %}

@@ -13,7 +13,7 @@ async function main() {
     hnList = data.map(item => ({
       title: item.data.title,
       url: item.data.url || `https://news.ycombinator.com/item?id=${item.data.id}`,
-      '🔥': `${item.data.score} points By ${item.data.by} ${new Date(item.data.time * 1000).toLocaleString()} | ${item.data.descendants} comments`,
+      info: `${item.data.score} points By ${item.data.by} ${new Date(item.data.time * 1000).toLocaleString()} | ${item.data.descendants} comments`,
     }));
   });
 
